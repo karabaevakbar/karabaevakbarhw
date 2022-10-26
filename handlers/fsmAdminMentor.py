@@ -2,9 +2,10 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
+from Database.bot_db import sql_command_insert
 
 from config import bot, ADMINS
-from keyboard.client_kb import cancel_markup
+from keyboard.client_cb import cancel_markup
 
 
 class FSMAdmin(StatesGroup):
@@ -76,6 +77,7 @@ async def load_group(message: types.Message, state: FSMContext):
 async def cancel_reg(message: types.Message, state: FSMContext):
     curren_state = await state.get_state()
     if curren_state is not None:
+        await sql_command_insert(state)
         await state.finish()
         await message.answer("Ну и пошел ты!")
 
